@@ -9,6 +9,7 @@ import { MdDelete } from "react-icons/md";
 import { IoAddCircleOutline } from "react-icons/io5";
 import { RiPlayListFill } from "react-icons/ri";
 import { MdFavorite } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
 
 // Modal components
 const ModalOverlay = styled.div<{ visible: boolean }>`
@@ -123,22 +124,22 @@ const Image = styled.img`
   width: 100%;
 `;
 
-const Button = styled.button<{ theme: "light" | "dark" }>`
-  background-color: ${({ theme }) =>
-    theme === "dark" ? "#2563eb" : "#1f2937"};
-  color: ${({ theme }) => (theme === "dark" ? "#ffffff" : "#f9fafb")};
-  border: none;
-  border-radius: 0.375rem;
-  padding: 0.5rem 1rem;
-  margin: 0.5rem;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
+// const Button = styled.button<{ theme: "light" | "dark" }>`
+//   background-color: ${({ theme }) =>
+//     theme === "dark" ? "#2563eb" : "#1f2937"};
+//   color: ${({ theme }) => (theme === "dark" ? "#ffffff" : "#f9fafb")};
+//   border: none;
+//   border-radius: 0.375rem;
+//   padding: 0.5rem 1rem;
+//   margin: 0.5rem;
+//   cursor: pointer;
+//   transition: background-color 0.3s ease;
 
-  &:hover {
-    background-color: ${({ theme }) =>
-      theme === "dark" ? "#1d4ed8" : "#374151"};
-  }
-`;
+//   &:hover {
+//     background-color: ${({ theme }) =>
+//       theme === "dark" ? "#1d4ed8" : "#374151"};
+//   }
+// `;
 
 const Title = styled.p`
   font-weight: 900;
@@ -307,6 +308,10 @@ const Home = () => {
     };
   }, []);
 
+  const toFavorite = useNavigate()
+  const toAdd = useNavigate()
+  const toPlaylist = useNavigate()
+
   return (
     <Section theme={theme}>
       <ToggleButton theme={theme} onClick={handleToggleTheme}>
@@ -329,9 +334,9 @@ const Home = () => {
         </PlayButtons>
       </Card>
       <OuterButton>
-        <MdFavorite css={OterButtonSingle} />
-        <IoAddCircleOutline css={OterButtonSingle} />
-        <RiPlayListFill css={OterButtonSingle} />
+        <MdFavorite css={OterButtonSingle} onClick={() => (toFavorite("/favorite"))}/>
+        <IoAddCircleOutline css={OterButtonSingle}  onClick={() => (toFavorite("/add"))}/>
+        <RiPlayListFill css={OterButtonSingle}  onClick={() => (toFavorite("/playlist"))}/>
       </OuterButton>
 
       <ModalOverlay visible={modalVisible}>
