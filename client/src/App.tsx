@@ -1,8 +1,9 @@
+import Login from "./pages/login/Login"
 
 const App = () => {
   return (
     <div>
-      <h1>Hello there</h1>
+      <Login/>
     </div>
   )
 }
