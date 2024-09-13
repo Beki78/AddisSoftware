@@ -174,7 +174,7 @@ export const OuterButton = styled.div`
   margin: 1rem auto;
   font-size: 1.6rem;
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   width: 25%;
   cursor: pointer;
 `;

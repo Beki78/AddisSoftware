@@ -57,26 +57,18 @@ export const updateMusic = async (
   }
 };
 
-export const addMusic = async (musicData: {
-  title: string;
-  artist: string;
-  imageFile: File;
-}) => {
+export const addMusic = async (newMusic: { title: string; artist: string }) => {
   try {
-    const formData = new FormData();
-    formData.append("title", musicData.title);
-    formData.append("artist", musicData.artist);
-    formData.append("image", musicData.imageFile); // Add image file to form data
-
-    const response = await axios.post(API_URL, formData, {
-      headers: { "Content-Type": "multipart/form-data" },
+    const response = await axios.post(`${API_URL}`, newMusic, {
+      headers: {
+        "Content-Type": "application/json",
+      },
     });
-    console.log("Added Music:", response.data);
-
+    console.log("Music added successfully:", response.data);
     return response.data;
   } catch (error) {
     if (error instanceof Error) {
-      console.log("Error adding music:", error.message);
+      console.log(error.message);
     } else {
       console.log("An unknown error occurred");
     }

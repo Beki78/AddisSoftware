@@ -31,6 +31,7 @@ import { Theme } from "./Playlist.types";
 
 // Playlist Component
 const Playlist = ({ theme }: { theme: Theme }) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [songs, setSongs] = useState<any[]>([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [modalEditVisible, setModalEditVisible] = useState(false);

@@ -2,7 +2,7 @@
 import { useState, useEffect, useRef } from "react";
 import { FaSun, FaMoon, FaPen } from "react-icons/fa";
 import { GrChapterNext, GrChapterPrevious } from "react-icons/gr";
-import { MdDelete, MdFavorite } from "react-icons/md";
+import { MdDelete } from "react-icons/md";
 import { IoAddCircleOutline } from "react-icons/io5";
 import { RiPlayListFill } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
@@ -35,13 +35,16 @@ import {
   addMusic,
 } from "../../api/musicApi";
 
+
 const Home = () => {
   const [theme, setTheme] = useState<"light" | "dark">(
     () => (localStorage.getItem("theme") as "light" | "dark") || "light"
   );
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [musicList, setMusicList] = useState<any[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [selectedSong, setSelectedSong] = useState<any | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [modalEditVisible, setModalEditVisible] = useState(false);
@@ -64,6 +67,7 @@ const Home = () => {
     setModalVisible(true);
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleEditClick = (song: any) => {
     setSelectedSong(song);
     setModalEditVisible(true);
@@ -267,10 +271,7 @@ const Home = () => {
       </Card>
 
       <OuterButton>
-        <MdFavorite
-          css={OterButtonSingle}
-          onClick={() => navigate("/favorite")}
-        />
+       
         <IoAddCircleOutline css={OterButtonSingle} onClick={handleAddClick} />
         <RiPlayListFill
           css={OterButtonSingle}
