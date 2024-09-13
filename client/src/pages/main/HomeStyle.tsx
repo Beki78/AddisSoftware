@@ -245,3 +245,10 @@ export const FileInput = styled.input`
   color: ${({ theme }) =>
     theme === "dark" ? "#9ca3af" : "#4b5563"}; /* File input text color */
 `;
+export const NotFoundText = styled.p`
+  font-size: 1.2rem;
+  color: #999;
+  text-align: center;
+  margin: 20px 0;
+  font-weight: 500;
+`;

@@ -10,6 +10,10 @@ const MusicSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    image: {
+      type: String, // Store the image path
+      required: true,
+    },
   },
   { timestamps: true }
 );

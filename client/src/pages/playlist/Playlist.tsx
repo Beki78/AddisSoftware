@@ -91,6 +91,7 @@ const Playlist = ({ theme }: { theme: Theme }) => {
       console.log("No song selected for deletion");
     }
   };
+ 
 
   const handleUpdateClick = async () => {
     if (selectedSongId) {

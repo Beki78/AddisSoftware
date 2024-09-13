@@ -56,3 +56,29 @@ export const updateMusic = async (
     }
   }
 };
+
+export const addMusic = async (musicData: {
+  title: string;
+  artist: string;
+  imageFile: File;
+}) => {
+  try {
+    const formData = new FormData();
+    formData.append("title", musicData.title);
+    formData.append("artist", musicData.artist);
+    formData.append("image", musicData.imageFile); // Add image file to form data
+
+    const response = await axios.post(API_URL, formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+    console.log("Added Music:", response.data);
+
+    return response.data;
+  } catch (error) {
+    if (error instanceof Error) {
+      console.log("Error adding music:", error.message);
+    } else {
+      console.log("An unknown error occurred");
+    }
+  }
+};

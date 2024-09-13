@@ -3,12 +3,49 @@ import dotenv from "dotenv";
 import mongoose from "mongoose";
 import Music from "./models/music.models.js";
 import cors from "cors"
+import multer from "multer";
 dotenv.config();
 
 const app = express();
 app.use(express.json());
 app.use(cors())
 const PORT = process.env.PORT || 3001;
+
+
+app.use("/uploads", express.static("uploads"));
+
+// Configure Multer for image upload
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "./uploads");
+  },
+  filename: (req, file, cb) => {
+    cb(null, new Date().toISOString() + "-" + file.originalname);
+  },
+});
+
+const upload = multer({ storage: storage });
+
+app.post("/upload", upload.single("photo"), (req, res) => {
+  // Return the file URL
+  res.status(200).json({ filePath: `/uploads/${req.file.filename}` });
+});
+
+// POST route with image upload
+app.post("/", upload.single("image"), async (req, res) => {
+  const { title, artist } = req.body;
+  const image = req.file?.path; // File path from Multer
+
+  try {
+    if (!title || !artist || !image) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
+    const music = await Music.create({ title, artist, image });
+    res.status(200).json({ music });
+  } catch (error) {
+    res.status(500).json(error.message);
+  }
+});
 
 app.post("/", async (req, res) => {
   const body = req.body;
