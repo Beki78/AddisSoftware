@@ -2,7 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import { FaPen } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
-import { fetchSongsRequest } from "../../app/features/songs/data";
+// import { fetchSongsRequest } from "../../app/features/songs/data";
 import { useDispatch } from "react-redux";
 import {
   CancelButton,
@@ -99,7 +99,7 @@ const Playlist = ({ theme }: { theme: Theme }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(fetchSongsRequest()); // Dispatch action to fetch songs
+    // dispatch(fetchSongsRequest()); // Dispatch action to fetch songs
   }, [dispatch]);
 
   return (
