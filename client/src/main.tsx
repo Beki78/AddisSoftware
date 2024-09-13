@@ -7,6 +7,8 @@ import Signup from './pages/signup/Signup.tsx'
 import Home from './pages/main/Home.tsx'
 import Favorite from './pages/favorite/Favorite.tsx'
 import Playlist from './pages//playlist/Playlist.tsx'
+import { Provider } from 'react-redux'
+import  store  from './app/store.ts'
 
 const router = createBrowserRouter([
   {
@@ -18,7 +20,7 @@ const router = createBrowserRouter([
     element: <Signup />,
   },
   {
-    path: "/home",
+    path: "/",
     element: <Home />,
   },
   {
@@ -35,8 +37,11 @@ const router = createBrowserRouter([
   },
 ]);
 
-createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-   <RouterProvider router={router}/>
-  </StrictMode>,
-)
+createRoot(document.getElementById("root")!).render(
+  <Provider store={store}>
+    <StrictMode>
+      <RouterProvider router={router} />
+    </StrictMode>
+    ,
+  </Provider>
+);

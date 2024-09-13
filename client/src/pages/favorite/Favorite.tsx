@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import  { useState } from "react";
 import styled from "@emotion/styled";
 import { FaHeart } from "react-icons/fa";
 
