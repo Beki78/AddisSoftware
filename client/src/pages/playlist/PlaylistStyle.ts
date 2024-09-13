@@ -212,3 +212,10 @@ export const SongText = styled.div`
   display: flex;
   flex-direction: column;
 `;
+export const NotFoundText = styled.p`
+  font-size: 1.2rem;
+  color: #999;
+  text-align: center;
+  margin: 20px 0;
+  font-weight: 500;
+`;

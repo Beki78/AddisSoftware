@@ -2,8 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import { FaPen } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
-// import { fetchSongsRequest } from "../../app/features/songs/data";
-import { useDispatch } from "react-redux";
+import { fetchMusic, deleteMusic } from "../../api/musicApi"; // Import the deleteMusic function
 import {
   CancelButton,
   DeleteButton,
@@ -17,6 +16,7 @@ import {
   ModalButton,
   ModalContent,
   ModalOverlay,
+  NotFoundText,
   PlaylistContainer,
   PlaylistTitle,
   SongArtist,
@@ -29,100 +29,90 @@ import {
 } from "./PlaylistStyle";
 import { Theme } from "./Playlist.types";
 
-
 // Playlist Component
 const Playlist = ({ theme }: { theme: Theme }) => {
-  const [songs, setSongs] = useState([
-    {
-      id: 1,
-      image:
-        "https://d1csarkz8obe9u.cloudfront.net/themedlandingpages/tlp_hero_album-covers-d12ef0296af80b58363dc0deef077ecc.jpg?ts%20=%201698246112",
-      title: "Song Title 1",
-      artist: "Artist 1",
-    },
-    {
-      id: 2,
-      image:
-        "https://d1csarkz8obe9u.cloudfront.net/themedlandingpages/tlp_hero_album-covers-d12ef0296af80b58363dc0deef077ecc.jpg?ts%20=%201698246112",
-      title: "Song Title 2",
-      artist: "Artist 2",
-    },
-    {
-      id: 3,
-      image:
-        "https://d1csarkz8obe9u.cloudfront.net/themedlandingpages/tlp_hero_album-covers-d12ef0296af80b58363dc0deef077ecc.jpg?ts%20=%201698246112",
-      title: "Song Title 3",
-      artist: "Artist 3",
-    },
-  ]);
-
+  const [songs, setSongs] = useState<any[]>([]); // Initialize empty array for fetched songs
   const [modalVisible, setModalVisible] = useState(false);
   const [modalEditVisible, setModalEditVisible] = useState(false);
+  const [selectedSongId, setSelectedSongId] = useState<string | null>(null); // Store the selected song ID for deletion
 
-  const handleDeleteClick = () => {
-    setModalVisible(true);
-  };
-  const handleEditClick = () => {
-    setModalEditVisible(true);
-  };
-
-  const handleCloseModal = () => {
-    setModalVisible(false);
-  };
-  const handleCloseEditModal = () => {
-    setModalEditVisible(false);
-  };
-
-  const handleConfirmDelete = () => {
-    // Handle the delete action here
-    console.log("Item deleted");
-    setModalVisible(false);
-  };
-  const handleConfirmEdit = () => {
-    // Handle the delete action here
-    console.log("Item updated");
-    setModalEditVisible(false);
-  };
-  const modalRef = useRef<HTMLDivElement>(null);
-  const BackClicked = (e: MouseEvent) => {
-    if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
-      setModalVisible(false);
-      setModalEditVisible(false);
+  // Fetch data from the backend
+  const getData = async () => {
+    try {
+      const data = await fetchMusic(); // Fetch music from API
+      setSongs(data); // Set the fetched songs
+    } catch (error) {
+      console.error("Error fetching music:", error);
     }
   };
-  useEffect(() => {
-    document.addEventListener("mousedown", BackClicked);
-    return () => {
-      document.removeEventListener("mousedown", BackClicked);
-    };
-  }, []);
-  const dispatch = useDispatch();
 
   useEffect(() => {
-    // dispatch(fetchSongsRequest()); // Dispatch action to fetch songs
-  }, [dispatch]);
+    getData(); // Fetch data on component mount
+  }, []);
+
+ const handleDeleteClick = (id: string) => {
+   console.log("Delete button clicked for song:", id); // Log song ID
+   setSelectedSongId(id);
+   setModalVisible(true);
+ };
+
+  const handleCloseModal = () => setModalVisible(false);
+
+  const handleConfirmDelete = async () => {
+
+    if (selectedSongId) {
+      console.log("Making delete API call for song:", selectedSongId); // Ensure song ID is correct
+      try {
+        await deleteMusic(selectedSongId);
+        setSongs(songs.filter((song) => song._id !== selectedSongId));
+        setModalVisible(false);
+      } catch (error) {
+        console.error("Error deleting music:", error); // Check for errors
+      }
+    } else {
+      console.log("No song selected for deletion");
+    }
+  };
+
+  const modalRef = useRef<HTMLDivElement>(null);
+
 
   return (
     <PlaylistContainer theme={theme}>
       <PlaylistTitle>All Music</PlaylistTitle>
       <SongList>
-        {songs.map((song) => (
-          <SongItem key={song.id} theme={theme}>
-            <SongDetails>
-              <SongImage src={song.image} alt="" />
-              <SongText>
-                <SongTitle>{song.title}</SongTitle>
-                <SongArtist theme={theme}>{song.artist}</SongArtist>
-              </SongText>
-            </SongDetails>
-            <Icons>
-              <FaPen css={EditButton} onClick={handleEditClick} />
-              <MdDelete css={DeleteButton} onClick={handleDeleteClick} />
-            </Icons>
-          </SongItem>
-        ))}
+        {songs.length > 0 ? (
+          songs.map((song) => (
+            <SongItem key={song._id} theme={theme}>
+              <SongDetails>
+                {/* Default image placeholder if no image in DB */}
+                <SongImage
+                  src="https://via.placeholder.com/150"
+                  alt={song.title}
+                />
+                <SongText>
+                  <SongTitle>{song.title}</SongTitle>
+                  <SongArtist theme={theme}>{song.artist}</SongArtist>
+                </SongText>
+              </SongDetails>
+              <Icons>
+                <FaPen
+                  css={EditButton}
+                  onClick={() => setModalEditVisible(true)}
+                />
+                <MdDelete
+                  css={DeleteButton}
+                  onClick={() => handleDeleteClick(song._id)}
+                />
+              </Icons>
+            </SongItem>
+          ))
+        ) : (
+          <NotFoundText>No music found.</NotFoundText>
+        )}
       </SongList>
 
+      {/* Delete Modal */}
       <ModalOverlay visible={modalVisible}>
         <ModalContent theme={theme} ref={modalRef}>
           <h2>Confirm Deletion</h2>
@@ -137,14 +127,17 @@ const Playlist = ({ theme }: { theme: Theme }) => {
           </div>
         </ModalContent>
       </ModalOverlay>
+
+      {/* Edit Modal */}
       <ModalOverlay visible={modalEditVisible}>
         <ModalContent theme={theme} ref={modalRef}>
           <h2>Update Music</h2>
           <InputWrapper>
-            <FileInput type="file" theme={theme}/>
+            <FileInput type="file" theme={theme} />
             <div>
-              <InputLabel htmlFor="title" theme={theme}>Title</InputLabel>
-              <br />
+              <InputLabel htmlFor="title" theme={theme}>
+                Title
+              </InputLabel>
               <InputField
                 type="text"
                 placeholder="Music title"
@@ -153,7 +146,9 @@ const Playlist = ({ theme }: { theme: Theme }) => {
               />
             </div>
             <div>
-              <InputLabel htmlFor="artist" theme={theme}>Artist</InputLabel>
+              <InputLabel htmlFor="artist" theme={theme}>
+                Artist
+              </InputLabel>
               <InputField
                 type="text"
                 placeholder="Artist"
@@ -163,10 +158,16 @@ const Playlist = ({ theme }: { theme: Theme }) => {
             </div>
           </InputWrapper>
           <div>
-            <EditButtonComp theme={theme} onClick={handleConfirmEdit}>
+            <EditButtonComp
+              theme={theme}
+              onClick={() => console.log("Item updated")}
+            >
               Update
             </EditButtonComp>
-            <CancelButton theme={theme} onClick={handleCloseEditModal}>
+            <CancelButton
+              theme={theme}
+              onClick={() => setModalEditVisible(false)}
+            >
               Cancel
             </CancelButton>
           </div>
