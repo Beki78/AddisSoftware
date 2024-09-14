@@ -52,7 +52,7 @@ const Home = () => {
   const [formErrors, setFormErrors] = useState({ title: "", artist: "" });
 
   // State to manage uploaded image
-  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imageFile, setImageFile] = useState<File | null>(null);  
   const [editImageFile, setEditImageFile] = useState<File | null>(null);
 
   const handleToggleTheme = () => {

@@ -7,7 +7,7 @@ import Home from './pages/main/Home.tsx'
 import Favorite from './pages/favorite/Favorite.tsx'
 import Playlist from './pages//playlist/Playlist.tsx'
 import { Provider } from 'react-redux'
-import  store  from './app/store.ts'
+import  store  from './store/store.ts'
 
 const router = createBrowserRouter([
   {
