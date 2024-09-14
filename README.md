@@ -54,7 +54,8 @@
 
 ## 🚀 Live Demo <a name="live-demo"></a>
 
-- [Live Demo Link]([https://your-live-demo-link.com](https://musicplayer-addis.netlify.app/))
+- [Live Demo Link](https://musicplayer-addis.netlify.app/)
+
 
 
 
