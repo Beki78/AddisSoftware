@@ -86,14 +86,16 @@ export const updateMusic = async (
 
 export const addMusic = async (
   newMusic: { title: string; artist: string },
-  imageFile: File // The image file to be uploaded
+  imageFile?: File // The image file to be uploaded
 ) => {
   try {
     // Create a FormData object to send file data along with other form fields
     const formData = new FormData();
     formData.append("title", newMusic.title);
     formData.append("artist", newMusic.artist);
-    formData.append("image", imageFile); // Append the image file
+     if (imageFile) {
+       formData.append("image", imageFile);
+     }
 
     const response = await axios.post(`${API_URL}`, formData, {
       headers: {

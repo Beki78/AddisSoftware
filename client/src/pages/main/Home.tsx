@@ -186,8 +186,8 @@ const handleConfirmEdit = async () => {
             : "https://via.placeholder.com/150",
         };
 
-        await addMusic(newSong, imageFile);
-        setMusicList([...musicList, newSong]);
+       await addMusic(newSong, imageFile || undefined); // imageFile can be null
+       setMusicList([...musicList, newSong]);
       } catch (error) {
         console.error("Error adding item:", error);
       } finally {
