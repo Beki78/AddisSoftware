@@ -8,7 +8,7 @@ import {
   DeleteButton,
   EditButton,
   EditButtonComp,
-  FileInput,
+  // FileInput,
   Icons,
   InputField,
   InputLabel,
@@ -126,9 +126,12 @@ const Playlist = ({ theme }: { theme: Theme }) => {
             <SongItem key={song._id} theme={theme}>
               <SongDetails>
                 <SongImage
-                  src="https://via.placeholder.com/150"
-                  alt={song.title}
+                  src={
+                    song.image || "https://via.placeholder.com/150" // Use the actual image URL from the song object
+                  }
+                 
                 />
+
                 <SongText>
                   <SongTitle>{song.title}</SongTitle>
                   <SongArtist theme={theme}>{song.artist}</SongArtist>
@@ -177,7 +180,7 @@ const Playlist = ({ theme }: { theme: Theme }) => {
         <ModalContent theme={theme} ref={modalRef}>
           <h2>Update Music</h2>
           <InputWrapper>
-            <FileInput type="file" theme={theme} />
+            {/* <FileInput type="file" theme={theme} /> */}
             <div>
               <InputLabel htmlFor="title" theme={theme}>
                 Title

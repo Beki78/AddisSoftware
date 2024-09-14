@@ -208,6 +208,8 @@ export const EditButtonComp = styled.button<{ theme: Theme }>`
 export const SongImage = styled.img`
   width: 4rem;
   border-radius: 30%;
+  height: 7vh;
+  object-fit: cover;
 `;
 
 export const SongText = styled.div`

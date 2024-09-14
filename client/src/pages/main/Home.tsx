@@ -31,7 +31,7 @@ import {
 import {
   fetchMusic,
   deleteMusic,
-  updateMusic,
+  // updateMusic,
   addMusic,
 } from "../../api/musicApi";
 
@@ -125,47 +125,50 @@ const Home = () => {
     }
   };
 
-  const handleConfirmEdit = async () => {
-    const title = (document.getElementById("edit-title") as HTMLInputElement)
-      .value;
-    const artist = (document.getElementById("edit-artist") as HTMLInputElement)
-      .value;
+const handleConfirmEdit = async () => {
+  const title = (document.getElementById("edit-title") as HTMLInputElement)
+    .value;
+  const artist = (document.getElementById("edit-artist") as HTMLInputElement)
+    .value;
 
-    if (validateForm(title, artist) && selectedSong) {
-      setLoading(true);
-      try {
-        const updatedSong = { ...selectedSong, title, artist };
-
-        // Upload the new image file if there is one
-        if (editImageFile) {
-          const formData = new FormData();
-          formData.append("photo", editImageFile);
-
-          // Assuming you have an API endpoint to handle file uploads
-          const response = await fetch("/upload", {
-            method: "POST",
-            body: formData,
-          });
-
-          const data = await response.json();
-          updatedSong.photo = data.filePath; // Update the song with the new image URL
-        }
-
-        await updateMusic(updatedSong._id, updatedSong);
-        const updatedList = musicList.map((song) =>
-          song._id === selectedSong._id ? updatedSong : song
-        );
-        setMusicList(updatedList);
-        setSelectedSong(updatedSong);
-      } catch (error) {
-        console.error("Error updating item:", error);
-      } finally {
-        setLoading(false);
-        setModalEditVisible(false);
-        setEditImageFile(null); // Reset after use
+  if (validateForm(title, artist) && selectedSong) {
+    setLoading(true);
+    try {
+      const formData = new FormData();
+      formData.append("title", title);
+      formData.append("artist", artist);
+      if (editImageFile) {
+        formData.append("image", editImageFile);
       }
+
+      const response = await fetch(
+        `http://localhost:3001/${selectedSong._id}`,
+        {
+          method: "PUT",
+          body: formData,
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to update music");
+      }
+
+      const updatedMusic = await response.json();
+      const updatedList = musicList.map((song) =>
+        song._id === selectedSong._id ? updatedMusic.music : song
+      );
+      setMusicList(updatedList);
+    } catch (error) {
+      console.error("Error updating item:", error);
+    } finally {
+      setLoading(false);
+      setModalEditVisible(false);
+      setEditImageFile(null);
     }
-  };
+  }
+};
+
+
 
   const handleConfirmAdd = async () => {
     const title = (document.getElementById("title") as HTMLInputElement).value;

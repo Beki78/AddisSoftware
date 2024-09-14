@@ -34,7 +34,7 @@ export const fetchMusic = async () => {
 export const deleteMusic = async (id: string) => {
   try {
     // Send DELETE request to delete the music by its ID
-    const response = await axios.delete(`${API_URL}${id}`);
+    const response = await axios.delete(`${API_URL}/${id}`);
     console.log("Deleted Music:", response.data);
 
     // Return success message or deleted item
@@ -51,14 +51,27 @@ export const deleteMusic = async (id: string) => {
 
 export const updateMusic = async (
   id: string,
-  updatedData: { title: string; artist: string }
+  updatedData: { title: string; artist: string; imageFile?: File }
 ) => {
   try {
-    // Send PUT request to update the music record by its ID
-    const response = await axios.put(`${API_URL}${id}`, updatedData);
-    console.log("Updated Music:", response.data);
+    // Create a FormData object to handle file upload
+    const formData = new FormData();
+    formData.append("title", updatedData.title);
+    formData.append("artist", updatedData.artist);
 
-    // Return updated music data
+    // Append image file if provided
+    if (updatedData.imageFile) {
+      formData.append("image", updatedData.imageFile);
+    }
+
+    // Send PUT request with form data
+    const response = await axios.put(`${API_URL}/${id}`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data", // Set content type for form data
+      },
+    });
+
+    console.log("Updated Music:", response.data);
     return response.data;
   } catch (error) {
     // Handle errors
