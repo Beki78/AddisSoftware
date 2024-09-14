@@ -7,6 +7,8 @@ import { Theme } from "./Playlist.types"; // Import the Theme type
 export const PlaylistContainer = styled.div<{ theme: Theme }>`
   max-width: 800px;
   margin: 2rem auto;
+  height: 90vh;
+  overflow: auto;
   padding: 1rem;
   background-color: ${({ theme }) =>
     theme === "dark" ? "#1f2937" : "#f9fafb"};

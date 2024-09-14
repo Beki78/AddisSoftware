@@ -35,7 +35,6 @@ import {
   addMusic,
 } from "../../api/musicApi";
 
-
 const Home = () => {
   const [theme, setTheme] = useState<"light" | "dark">(
     () => (localStorage.getItem("theme") as "light" | "dark") || "light"
@@ -123,8 +122,6 @@ const Home = () => {
     const file = event.target.files?.[0];
     if (file) {
       setImage(file);
-      console.log(file);
-      
     }
   };
 
@@ -170,7 +167,6 @@ const Home = () => {
     }
   };
 
-
   const handleConfirmAdd = async () => {
     const title = (document.getElementById("title") as HTMLInputElement).value;
     const artist = (document.getElementById("artist") as HTMLInputElement)
@@ -187,7 +183,7 @@ const Home = () => {
             : "https://via.placeholder.com/150",
         };
 
-        await addMusic(newSong);
+        await addMusic(newSong, imageFile);
         setMusicList([...musicList, newSong]);
       } catch (error) {
         console.error("Error adding item:", error);
@@ -256,7 +252,7 @@ const Home = () => {
           <div className="flex flex-col justify-center items-center">
             <Image
               src={
-                musicList[currentIndex]?.photo ||
+                musicList[currentIndex]?.image ||
                 "https://via.placeholder.com/150"
               }
             />
@@ -273,7 +269,6 @@ const Home = () => {
       </Card>
 
       <OuterButton>
-       
         <IoAddCircleOutline css={OterButtonSingle} onClick={handleAddClick} />
         <RiPlayListFill
           css={OterButtonSingle}
@@ -286,99 +281,102 @@ const Home = () => {
         <ModalContent theme={theme} ref={modalRef}>
           <h2>Confirm Deletion</h2>
           <p>Are you sure you want to delete this item?</p>
-          <div>
-            <ModalButton theme={theme} onClick={handleConfirmDelete}>
-              Delete
-            </ModalButton>
-            <CancelButton theme={theme} onClick={handleCloseModal}>
-              Cancel
-            </CancelButton>
-          </div>
+          <ModalButton
+            theme={theme}
+            onClick={handleConfirmDelete}
+            disabled={loading}
+          >
+            Confirm
+          </ModalButton>
+          <CancelButton theme={theme} onClick={handleCloseModal}>
+            Cancel
+          </CancelButton>
         </ModalContent>
       </ModalOverlay>
 
       <ModalOverlay visible={modalEditVisible}>
         <ModalContent theme={theme} ref={modalRef}>
-          <h2>Update Music</h2>
           <InputWrapper>
+            <InputLabel htmlFor="edit-title">Title</InputLabel>
+            <InputField
+              theme={theme}
+              id="edit-title"
+              defaultValue={selectedSong?.title || ""}
+              placeholder="Enter song title"
+            />
+            {formErrors.title && <p>{formErrors.title}</p>}
+          </InputWrapper>
+          <InputWrapper>
+            <InputLabel htmlFor="edit-artist">Artist</InputLabel>
+            <InputField
+              id="edit-artist"
+              theme={theme}
+              defaultValue={selectedSong?.artist || ""}
+              placeholder="Enter artist name"
+            />
+            {formErrors.artist && <p>{formErrors.artist}</p>}
+          </InputWrapper>
+          <InputWrapper>
+            <InputLabel htmlFor="edit-photo">Photo</InputLabel>
             <FileInput
+              id="edit-photo"
               type="file"
+              accept="image/*"
               onChange={(e) => handleImageChange(e, setEditImageFile)}
             />
-            <div>
-              <InputLabel htmlFor="edit-title">Title</InputLabel>
-              <InputField
-                type="text"
-                placeholder="Music title"
-                id="edit-title"
-                theme={theme}
-                defaultValue={selectedSong?.title || ""}
-              />
-              {formErrors.title && <p>{formErrors.title}</p>}
-            </div>
-            <div>
-              <InputLabel htmlFor="edit-artist">Artist</InputLabel>
-              <InputField
-                type="text"
-                placeholder="Artist"
-                id="edit-artist"
-                theme={theme}
-                defaultValue={selectedSong?.artist || ""}
-              />
-              {formErrors.artist && <p>{formErrors.artist}</p>}
-            </div>
           </InputWrapper>
-          <div>
-            <ModalButton theme={theme} onClick={handleConfirmEdit}>
-              Update
-            </ModalButton>
-            <CancelButton theme={theme} onClick={handleCloseEditModal}>
-              Cancel
-            </CancelButton>
-          </div>
+          <ModalButton
+            onClick={handleConfirmEdit}
+            disabled={loading}
+            theme={theme}
+          >
+            Confirm
+          </ModalButton>
+          <CancelButton onClick={handleCloseEditModal} theme={theme}>
+            Cancel
+          </CancelButton>
         </ModalContent>
       </ModalOverlay>
 
       <ModalOverlay visible={modalAddVisible}>
         <ModalContent theme={theme} ref={modalRef}>
-          <h2>Add Music</h2>
           <InputWrapper>
+            <InputLabel htmlFor="title">Title</InputLabel>
+            <InputField
+              id="title"
+              placeholder="Enter song title"
+              theme={theme}
+            />
+            {formErrors.title && <p>{formErrors.title}</p>}
+          </InputWrapper>
+          <InputWrapper>
+            <InputLabel htmlFor="artist">Artist</InputLabel>
+            <InputField
+              id="artist"
+              placeholder="Enter artist name"
+              theme={theme}
+            />
+            {formErrors.artist && <p>{formErrors.artist}</p>}
+          </InputWrapper>
+          <InputWrapper>
+            <InputLabel htmlFor="photo">Photo</InputLabel>
             <FileInput
+              id="photo"
               type="file"
+              accept="image/*"
               onChange={(e) => handleImageChange(e, setImageFile)}
             />
-            <div>
-              <InputLabel htmlFor="title">Title</InputLabel>
-              <InputField
-                type="text"
-                placeholder="Music title"
-                id="title"
-                theme={theme}
-              />
-              {formErrors.title && <p>{formErrors.title}</p>}
-            </div>
-            <div>
-              <InputLabel htmlFor="artist">Artist</InputLabel>
-              <InputField
-                type="text"
-                placeholder="Artist"
-                id="artist"
-                theme={theme}
-              />
-              {formErrors.artist && <p>{formErrors.artist}</p>}
-            </div>
           </InputWrapper>
-          <div>
-            <ModalButton theme={theme} onClick={handleConfirmAdd}>
-              Add
-            </ModalButton>
-            <CancelButton
-              theme={theme}
-              onClick={() => setModalAddVisible(false)}
-            >
-              Cancel
-            </CancelButton>
-          </div>
+          <ModalButton
+            onClick={handleConfirmAdd}
+            disabled={loading}
+            theme={theme}
+          >
+            Confirm
+          </ModalButton>
+          <CancelButton onClick={() => setModalAddVisible(false)} theme={theme}>
+            Cancel
+          </CancelButton>
         </ModalContent>
       </ModalOverlay>
     </Section>

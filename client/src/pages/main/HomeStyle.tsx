@@ -112,6 +112,8 @@ export const Card = styled.div<{ theme: "light" | "dark" }>`
 export const Image = styled.img`
   border-radius: 0.5rem;
   width: 100%;
+  height: 50vh;
+  object-fit: cover;
 `;
 
 // export const Button = styled.button<{ theme: "light" | "dark" }>`
