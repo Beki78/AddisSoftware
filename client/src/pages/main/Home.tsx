@@ -31,7 +31,6 @@ import {
 import {
   fetchMusic,
   deleteMusic,
-  // updateMusic,
   addMusic,
 } from "../../api/musicApi";
 
@@ -142,7 +141,7 @@ const handleConfirmEdit = async () => {
       }
 
       const response = await fetch(
-        `http://localhost:3001/${selectedSong._id}`,
+        `https://addissoftware-i6um.onrender.com/${selectedSong._id}`,
         {
           method: "PUT",
           body: formData,
@@ -186,14 +185,14 @@ const handleConfirmEdit = async () => {
             : "https://via.placeholder.com/150",
         };
 
-       await addMusic(newSong, imageFile || undefined); // imageFile can be null
+       await addMusic(newSong, imageFile || undefined); 
        setMusicList([...musicList, newSong]);
       } catch (error) {
         console.error("Error adding item:", error);
       } finally {
         setLoading(false);
         setModalAddVisible(false);
-        setImageFile(null); // Reset after use
+        setImageFile(null); 
       }
     }
   };

@@ -1,12 +1,11 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:3001";
+const API_URL = "https://addissoftware-i6um.onrender.com";
 
 export const fetchMusic = async () => {
   try {
     const response = await axios.get(API_URL);
 
-    // Check the structure of the response
     if (response.data && Array.isArray(response.data.music)) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const music = response.data.music.map((item: any) => ({
@@ -20,7 +19,6 @@ export const fetchMusic = async () => {
       return [];
     }
   } catch (error) {
-    // Type assertion to Error
     if (error instanceof Error) {
       console.error("Error fetching music:", error.message);
     } else {
@@ -33,11 +31,9 @@ export const fetchMusic = async () => {
 
 export const deleteMusic = async (id: string) => {
   try {
-    // Send DELETE request to delete the music by its ID
     const response = await axios.delete(`${API_URL}/${id}`);
     console.log("Deleted Music:", response.data);
 
-    // Return success message or deleted item
     return response.data;
   } catch (error) {
     // Handle errors
@@ -54,20 +50,17 @@ export const updateMusic = async (
   updatedData: { title: string; artist: string; imageFile?: File }
 ) => {
   try {
-    // Create a FormData object to handle file upload
     const formData = new FormData();
     formData.append("title", updatedData.title);
     formData.append("artist", updatedData.artist);
 
-    // Append image file if provided
     if (updatedData.imageFile) {
       formData.append("image", updatedData.imageFile);
     }
 
-    // Send PUT request with form data
     const response = await axios.put(`${API_URL}/${id}`, formData, {
       headers: {
-        "Content-Type": "multipart/form-data", // Set content type for form data
+        "Content-Type": "multipart/form-data", 
       },
     });
 

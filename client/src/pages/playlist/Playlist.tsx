@@ -8,7 +8,6 @@ import {
   DeleteButton,
   EditButton,
   EditButtonComp,
-  // FileInput,
   Icons,
   InputField,
   InputLabel,
@@ -29,7 +28,6 @@ import {
 } from "./PlaylistStyle";
 import { Theme } from "./Playlist.types";
 
-// Playlist Component
 const Playlist = ({ theme }: { theme: Theme }) => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [songs, setSongs] = useState<any[]>([]);
@@ -42,7 +40,6 @@ const Playlist = ({ theme }: { theme: Theme }) => {
   const modalRef = useRef<HTMLDivElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
 
-  // Fetch data from the backend
   const getData = async () => {
     try {
       const data = await fetchMusic();
@@ -127,7 +124,7 @@ const Playlist = ({ theme }: { theme: Theme }) => {
               <SongDetails>
                 <SongImage
                   src={
-                    song.image || "https://via.placeholder.com/150" // Use the actual image URL from the song object
+                    song.image || "https://via.placeholder.com/150" 
                   }
                  
                 />
@@ -159,7 +156,6 @@ const Playlist = ({ theme }: { theme: Theme }) => {
         )}
       </SongList>
 
-      {/* Delete Modal */}
       <ModalOverlay visible={modalVisible} ref={overlayRef}>
         <ModalContent theme={theme} ref={modalRef}>
           <h2>Confirm Deletion</h2>
@@ -180,7 +176,6 @@ const Playlist = ({ theme }: { theme: Theme }) => {
         <ModalContent theme={theme} ref={modalRef}>
           <h2>Update Music</h2>
           <InputWrapper>
-            {/* <FileInput type="file" theme={theme} /> */}
             <div>
               <InputLabel htmlFor="title" theme={theme}>
                 Title
